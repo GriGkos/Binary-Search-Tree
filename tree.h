@@ -28,7 +28,7 @@ private:
     void deleteElem_helper(TreeNode *&, int);
     void deleteDuplicates_helper(TreeNode *&);
     int height_helper(TreeNode *) const;
-    void print_helper(TreeNode *, int = 0) const;
+    void printTree(TreeNode *, int = 0) const;
     void floor_by_floor_helper(TreeNode *) const;
     void inOrder_floor(TreeNode *, int, int) const;
     void copy_helper(const TreeNode *);
@@ -45,7 +45,6 @@ public:
     void preOrder() const;
     void postOrder() const;
     void deleteTree();
-    void print_Tree() const;
     void deleteDuplicates();
     int height() const;
     void floor_by_floor() const;
