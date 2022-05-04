@@ -1,33 +1,33 @@
 #include "tree.h"
 
-//конструктор класса
+//class constructor
 Tree::Tree()
 {
     rootPtr = NULL;
 }
 
-//деструктор класса
+//class destructor
 Tree::~Tree()
 {
     deleteTree_helper(rootPtr);
 }
 
-//конструктор копирования
+//copy constructor
 Tree::Tree(const Tree &original)
 {
     rootPtr = NULL;
     copy(original);
 }
 
-// перегрузка оператора вывода
+//the output operator overload
 ostream &operator<<(ostream &output, const Tree &T)
 {
-    T.print_Tree();
+    T.printTree(T.rootPtr);
 
     return output;
 }
 
-//перегрузка оператора ввода
+//the input operator overload
 istream &operator>>(istream &input, Tree &T)
 {
     T.addElements();
@@ -35,7 +35,7 @@ istream &operator>>(istream &input, Tree &T)
     return input;
 }
 
-//перегрузка оператора присваивания
+//the assignment operator overload
 Tree &Tree::operator=(const Tree &rightTree)
 {
     copy(rightTree);
@@ -43,6 +43,7 @@ Tree &Tree::operator=(const Tree &rightTree)
     return *this;
 }
 
+//checking for emptiness
 bool Tree::isEmpty() const
 {
     if (rootPtr == NULL)
@@ -51,7 +52,7 @@ bool Tree::isEmpty() const
     return rootPtr == NULL;
 }
 
-//добавление элементов в дерево
+//adding elements to the tree
 void Tree::addElements()
 {
     int choice;
@@ -81,7 +82,7 @@ void Tree::addElements()
          << *this << endl;
 }
 
-//функция добавления элемента в дерево
+//inserting a node to the tree
 void Tree::insertNode(TreeNode *&treePtr, int value)
 {
     if (treePtr == NULL)
@@ -104,7 +105,7 @@ void Tree::insertNode(TreeNode *&treePtr, int value)
         insertNode(treePtr->rightPtr, value);
 }
 
-//создание дерева рандомно
+//creating tree randomly
 void Tree::createTreeRandomly()
 {
     srand(time(NULL));
@@ -127,7 +128,7 @@ void Tree::createTreeRandomly()
     cout << endl;
 }
 
-//создание дерева вручную
+//creating tree manually
 void Tree::createTreeManually()
 {
     int count, item;
@@ -143,7 +144,7 @@ void Tree::createTreeManually()
     }
 }
 
-//порядковый обход
+//in order traversal
 void Tree::inOrder() const
 {
     if (!isEmpty())
@@ -164,7 +165,7 @@ void Tree::inOrder_helper(TreeNode *treePtr) const
     }
 }
 
-//предварительный обход
+//pre order traversal
 void Tree::preOrder() const
 {
     if (!isEmpty())
@@ -185,7 +186,7 @@ void Tree::preOrder_helper(TreeNode *treePtr) const
     }
 }
 
-//отложенный обход
+//post order traversal
 void Tree::postOrder() const
 {
     if (!isEmpty())
@@ -206,7 +207,7 @@ void Tree::postOrder_helper(TreeNode *treePtr) const
     }
 }
 
-//удаление дерева
+//tree delition
 void Tree::deleteTree()
 {
     deleteTree_helper(rootPtr);
@@ -224,34 +225,13 @@ void Tree::deleteTree_helper(TreeNode *treePtr)
     }
 }
 
-//высота дерева
-int Tree::height() const
-{
-    return height_helper(rootPtr);
-}
-
-int Tree::height_helper(TreeNode *treePtr) const
-{
-    if (treePtr == NULL)
-        return 0;
-
-    else
-        return 1 + max(height_helper(treePtr->leftPtr), height_helper(treePtr->rightPtr));
-}
-
-//печать дерева
-void Tree::print_Tree() const
-{
-    if (!isEmpty())
-        print_helper(rootPtr);
-}
-
-void Tree::print_helper(TreeNode *treePtr, int indent) const
+//tree printing
+void Tree::printTree(TreeNode *treePtr, int indent) const
 {
     if (treePtr != NULL)
     {
         if (treePtr->rightPtr != NULL)
-            print_helper(treePtr->rightPtr, indent + 4);
+            printTree(treePtr->rightPtr, indent + 4);
 
         if (indent != 0)
             cout << setw(indent) << ' ';
@@ -266,12 +246,27 @@ void Tree::print_helper(TreeNode *treePtr, int indent) const
         if (treePtr->leftPtr)
         {
             cout << setw(indent) << ' ' << " \\" << endl;
-            print_helper(treePtr->leftPtr, indent + 4);
+            printTree(treePtr->leftPtr, indent + 4);
         }
     }
 }
 
-//поэтажный обход дерева
+//tree height
+int Tree::height() const
+{
+    return height_helper(rootPtr);
+}
+
+int Tree::height_helper(TreeNode *treePtr) const
+{
+    if (treePtr == NULL)
+        return 0;
+
+    else
+        return 1 + max(height_helper(treePtr->leftPtr), height_helper(treePtr->rightPtr));
+}
+
+//floor-by-floor tree traversal
 void Tree::floor_by_floor() const
 {
     floor_by_floor_helper(rootPtr);
@@ -289,9 +284,9 @@ void Tree::floor_by_floor_helper(TreeNode *treePtr) const
     cout << endl;
 }
 
+//assistant function for floor-by-floor traversal
 void Tree::inOrder_floor(TreeNode *treePtr, int floor, int i) const
 {
-
     if (treePtr != NULL)
     {
         inOrder_floor(treePtr->leftPtr, ++floor, i);
@@ -304,7 +299,7 @@ void Tree::inOrder_floor(TreeNode *treePtr, int floor, int i) const
     }
 }
 
-//копирование дерева
+//tree copying
 void Tree::copy(Tree const &original)
 {
     if (rootPtr != NULL)
@@ -323,7 +318,7 @@ void Tree::copy_helper(TreeNode const *treePtr)
     }
 }
 
-//удаление элемента
+//element deletion
 void Tree::deleteElem(int data)
 {
     deleteElem_helper(rootPtr, data);
@@ -370,8 +365,7 @@ void Tree::deleteElem_helper(TreeNode *&treePtr, int value)
     }
 }
 
-//функция-помощник для удаления элемента
-//поиск узла с максимальным значением
+//finding the node with a max value
 TreeNode *Tree::findMaximumKey(TreeNode *treePtr) const
 {
     TreeNode *current = treePtr;
@@ -381,7 +375,7 @@ TreeNode *Tree::findMaximumKey(TreeNode *treePtr) const
     return current;
 }
 
-//удаление дубликатов
+//duplicates deletion
 void Tree::deleteDuplicates()
 {
     deleteDuplicates_helper(rootPtr);
@@ -399,6 +393,7 @@ void Tree::deleteDuplicates_helper(TreeNode *&treePtr)
     }
 }
 
+//finding the min value of the subtree
 bool Tree::inRight(TreeNode *treePtr, int value) const
 {
     if (treePtr == NULL)
@@ -411,6 +406,7 @@ bool Tree::inRight(TreeNode *treePtr, int value) const
     return (current->data == value);
 }
 
+//finding the max value of the subtree
 bool Tree::inLeft(TreeNode *treePtr, int value) const
 {
     if (treePtr == NULL)
